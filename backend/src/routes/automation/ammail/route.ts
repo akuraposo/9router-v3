@@ -427,8 +427,8 @@ export async function POST_handler(req, res) {
     if (action === "inbox-create") {
       const { alias, domain } = body;
       try {
-        const res = await client.createInbox(alias, domain);
-        return res.json({ ok: true, inbox: res.inbox });
+        const inboxRes = await client.createInbox(alias, domain);
+        return res.json({ ok: true, inbox: inboxRes.inbox || inboxRes });
       } catch (e) {
         return res.status(502).json({ error: e.message || String(e) });
       }
