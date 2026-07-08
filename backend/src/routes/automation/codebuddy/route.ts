@@ -276,12 +276,13 @@ export async function POST_handler(req, res) {
               break; // Other errors (auth, network) — stop retrying
             }
           }
-          if (!res || !res.inbox || !res.inbox.address) {
+          const inbox = res?.inbox || res;
+          if (!inbox || !inbox.address) {
             throw lastErr || new Error("Failed to create an Ammail inbox");
           }
 
-          const email = res.inbox.address;
-          const alias = res.inbox.alias;
+          const email = inbox.address;
+          const alias = inbox.alias || email.split("@")[0];
           const password = generateStrongPassword(16);
 
           const profilesDir = path.resolve(process.cwd(), `profiles/${targetProvider}`);
